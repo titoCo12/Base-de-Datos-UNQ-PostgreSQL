@@ -1,0 +1,9 @@
+no se puede usar el JOIN solo sin la clausula "ON", 
+incluso con dos atributos del mismo nombre, para eso
+esta el "NATURAL JOIN".
+
+el ejercicio hace referencia al producto cartesiano, su equivalente
+es el NATURAL JOIN en caso de que dos tablas no tengan atributos con
+el mismo nombre, o el CROSS JOIN, pero en caso de que ambas tablas
+tengan un atributo con el mismo nombre el cross join hace el producto cartesiano
+de todas formas.

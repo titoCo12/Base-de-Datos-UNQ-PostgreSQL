@@ -1,0 +1,52 @@
+--(a) Obtener la cantidad de goles convertidos por el jugador “Messi” en el partido 103243
+
+
+SELECT COUNT(*) FROM gol
+WHERE nombregoleador = 'Messi' AND
+idpartido = 103243;
+
+
+--(b) Obtener nombre y cantidad de banderitas de los estadios donde haya dirigido algún
+árbitro que haya sacado tarjeta roja y al menos una tarjeta amarilla.
+
+
+SELECT DISTINCT est.nombre, est.cantidadbanderitas FROM estadio AS est
+JOIN partido AS par ON est.nombre = par.estadio
+WHERE par.idpartido IN (SELECT DISTINCT ta.idpartido FROM tarjetaamarilla AS ta
+                        JOIN tarjetaroja AS tr ON ta.idpartido = tr.idpartido);
+
+
+--(c) Obtener el nombre de los jugadores que hayan recibidos tarjetas amarillas pero no tarjetas rojas.
+
+
+SELECT nombreamonestado FROM tarjetaamarilla
+WHERE nombreamonestado NOT IN (SELECT nombreamonestado FROM tarjetaroja);
+
+
+--(d) Obtener los nombres de las selecciones con arqueros goleadores y defensores goleadores.
+
+
+SELECT DISTINCT sel.nombreseleccion FROM seleccion AS sel
+JOIN jugadordeseleccion AS jug ON sel.nombreseleccion = jug.nombreseleccion
+JOIN gol AS gl ON jug.nombre = gl.nombregoleador
+WHERE jug.posicion = 'Defensa' OR
+jug.posicion = 'Arquero';
+
+
+--(e) Obtener los nombres de jugadores expulsados por doble amarilla
+
+
+SELECT nombreamonestado FROM tarjetaamarilla
+GROUP BY nombreamonestado, idpartido
+HAVING COUNT(nombreamonestado) >= 2;
+
+
+--(f) Obtener la tabla de equipos ordenados de mayor a menor de acuerdo a la cantidad de goles que convirtieron. La tabla resultante debe tener 2 columnas con el nombre del seleccionado y la cantidad de goles convertidos.
+
+
+SELECT sel.nombreseleccion, COUNT(gl.*)  FROM seleccion AS sel
+JOIN jugadordeseleccion AS jug ON sel.nombreseleccion = jug.nombreseleccion
+JOIN gol AS gl ON jug.nombre = gl.nombregoleador
+GROUP BY sel.nombreseleccion
+ORDER BY COUNT(gl.*) DESC;
+

@@ -1,0 +1,12 @@
+INSERT INTO alumno (legajo,apellido,aniodeingreso,trabaja) 
+VALUES (1111,'Fuentes','Tito',2022,'False'),
+       (1112,'Nieto','Lautaro','2023','True'),
+       (1113,'Araujo','Lautaro','2023', 'False'),
+       (1114,'Ferrero','Cristian','2022', 'True'),
+       (1115,'Bordo','Cam','2020','False'),
+       (1116,'Cartavio','Hun','2021','False'),
+       (1117,'Prego','Wada','2021','True');
+
+
+INSERT INTO inscripto (cod_curso,legajo) 
+VALUES (),

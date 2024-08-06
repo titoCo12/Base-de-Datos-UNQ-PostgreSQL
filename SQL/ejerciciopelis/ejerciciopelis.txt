@@ -1,0 +1,165 @@
+
+-- Vamos a realizar diferentes consultas en una tabla que modela películas y compañías que las producen. Las primeras consultas son introductorias y las últimas introducen GROUP BY y HAVING
+-- Creación de tablas companies y movies
+CREATE TABLE companies
+(
+    id serial primary key,
+    company_name VARCHAR(512)
+);
+
+INSERT INTO companies (company_name) VALUES ('Columbia Pictures');
+INSERT INTO companies (company_name) VALUES ('Paramount Pictures');
+INSERT INTO companies (company_name) VALUES ('Warner Bros. Pictures');
+INSERT INTO companies (company_name) VALUES ('United Artists');
+INSERT INTO companies (company_name) VALUES ('Universal Pictures');
+INSERT INTO companies (company_name) VALUES ('New Line Cinema');
+INSERT INTO companies (company_name) VALUES ('Miramax Films');
+INSERT INTO companies (company_name) VALUES ('Produzioni Europee Associate');
+INSERT INTO companies (company_name) VALUES ('Buena Vista');
+INSERT INTO companies (company_name) VALUES ('StudioCanal');
+
+CREATE TABLE movies
+(
+    id serial primary key,
+    movie_title VARCHAR(512),
+    imdb_rating decimal(8,2),
+    year_released INT,
+    budget decimal(8,2),
+    box_office decimal(8,2),
+    distribution_company_id serial,
+    language VARCHAR(512),
+    CONSTRAINT moviespk FOREIGN KEY (distribution_company_id) REFERENCES companies(id)
+);
+
+INSERT INTO movies (movie_title, imdb_rating, year_released, budget, box_office, distribution_company_id, language) VALUES ('The Shawshank Redemption', 9.2, '1994', 25.00, 73.30, 1, 'English');
+INSERT INTO movies (movie_title, imdb_rating, year_released, budget, box_office, distribution_company_id, language) VALUES ('The Godfather', 9.2, '1972', 7.20, 291.00, 2, 'English');
+INSERT INTO movies (movie_title, imdb_rating, year_released, budget, box_office, distribution_company_id, language) VALUES ('The Dark Knight', 9.0, '2008', 185.00, 1006.00, 3, 'English');
+INSERT INTO movies (movie_title, imdb_rating, year_released, budget, box_office, distribution_company_id, language) VALUES ('The Godfather Part II', 9.0, '1974', 13.00, 93.00, 2, 'English, Sicilian');
+INSERT INTO movies (movie_title, imdb_rating, year_released, budget, box_office, distribution_company_id, language) VALUES ('12 Angry Men', 9.0, '1957', 0.34, 2.00, 4, 'English');
+INSERT INTO movies (movie_title, imdb_rating, year_released, budget, box_office, distribution_company_id, language) VALUES ('Schindlers List', 8.9, '1993', 22.00, 322.20, 5, 'English, German, Yiddish');
+INSERT INTO movies (movie_title, imdb_rating, year_released, budget, box_office, distribution_company_id, language) VALUES ('The Lord of the Rings: The Return of the King', 8.9, '2003', 94.00, 1146.00, 6, 'English');
+INSERT INTO movies (movie_title, imdb_rating, year_released, budget, box_office, distribution_company_id, language) VALUES ('Pulp Fiction', 8.8, '1994', 8.50, 213.90, 7, 'English');
+INSERT INTO movies (movie_title, imdb_rating, year_released, budget, box_office, distribution_company_id, language) VALUES ('The Lord of the Rings: The Fellowship of the Ring', 8.8, '2001', 93.00, 898.20, 6, 'English');
+INSERT INTO movies (movie_title, imdb_rating, year_released, budget, box_office, distribution_company_id, language) VALUES ('The Good, the Bad and the Ugly', 8.8, '1966', 1.20, 38.90, 8, 'English, Italian, Spanish');
+
+
+
+
+
+
+-- Consultas
+-- 1: Seleccionar todos los datos de la tabla companies.
+
+
+--2: Seleccionar todos los datos de la tabla movies.
+
+
+--3: Para cada película, seleccione el título, la calificación IMDb y el año de estreno.
+
+
+-- 4: Seleccione las columnas movie_title y box_office de la tabla movies. Mostrar sólo las películas con ganancias superiores a 300 millones de dólares.
+
+
+-- 5: Seleccione las columnas movie_title, imdb_rating, y year_released de la tabla movies. Mostrar las películas que tienen la palabra 'El Padrino' en el título.
+
+
+-- 6: Seleccione las columnas movie_title, imdb_rating, y year_released de la tabla movies. Mostrar las películas que se estrenaron antes de 2001 y tuvieron una calificación superior a 9.
+
+
+-- 7: Seleccione las columnas movie_title, imdb_rating, y year_released de la tabla movies. Muestra las películas estrenadas después de 1991. Ordene la salida por el año de estreno en orden ascendente.
+
+
+-- 8: Mostrar títulos de películas de la tabla movies, cada uno con el nombre de su distribuidora.
+
+
+--9: Mostrar el recuento de películas por cada categoría de idioma.
+
+--10: Mostrar el conteo de películas por año de estreno e idioma. Ordenar los resultados por la fecha de estreno en orden ascendente.
+
+
+-- 11: Mostrar los idiomas hablados y el presupuesto medio de las películas por categoría de idioma. Mostrar sólo los idiomas con un presupuesto medio superior a 50 millones de dólares.
+
+
+
+
+
+RESUELTO:
+
+-- 1: Seleccionar todos los datos de la tabla companies.
+SELECT *
+FROM companies;
+
+--2: Seleccionar todos los datos de la tabla movies.
+SELECT *
+FROM movies;
+
+--3: Para cada película, seleccione el título, la calificación IMDb y el año de estreno.
+SELECT
+  movie_title,
+  imdb_rating,
+  year_released
+FROM movies;
+
+-- 4: Seleccione las columnas movie_title y box_office de la tabla movies. Mostrar sólo las películas con ganancias superiores a 300 millones de dólares.
+SELECT
+  movie_title,
+  box_office
+FROM movies
+WHERE box_office > 300;
+
+-- 5: Seleccione las columnas movie_title, imdb_rating, y year_released de la tabla movies. Mostrar las películas que tienen la palabra 'El Padrino' en el título.
+SELECT
+  movie_title,
+  imdb_rating,
+  year_released
+FROM movies
+WHERE movie_title LIKE '%Godfather%';
+
+-- 6: Seleccione las columnas movie_title, imdb_rating, y year_released de la tabla movies. Mostrar las películas que se estrenaron antes de 2001 y tuvieron una calificación superior a 9.
+SELECT
+  movie_title,
+  imdb_rating,
+  year_released
+FROM movies
+WHERE year_released < 2001 AND imdb_rating > 9;
+
+-- 7: Seleccione las columnas movie_title, imdb_rating, y year_released de la tabla movies. Muestra las películas estrenadas después de 1991. Ordene la salida por el año de estreno en orden ascendente.
+SELECT
+  movie_title,
+  imdb_rating,
+  year_released
+FROM movies
+WHERE year_released > 1991
+ORDER BY year_released ASC;
+
+-- 8: Mostrar títulos de películas de la tabla movies, cada uno con el nombre de su distribuidora.
+SELECT
+  movie_title,
+  company_name
+FROM distribution_companies dc
+JOIN movies m
+ON dc.id = m.distribution_company_id;
+
+--9: Mostrar el recuento de películas por cada categoría de idioma.
+SELECT
+  language,
+  COUNT(*) AS number_of_movies
+FROM movies
+GROUP BY language;
+
+--10: Mostrar el conteo de películas por año de estreno e idioma. Ordenar los resultados por la fecha de estreno en orden ascendente.
+SELECT
+  year_released,
+  language,
+  COUNT(*) AS number_of_movies
+FROM movies
+GROUP BY year_released, language
+ORDER BY year_released ASC;
+
+-- 11: Mostrar los idiomas hablados y el presupuesto medio de las películas por categoría de idioma. Mostrar sólo los idiomas con un presupuesto medio superior a 50 millones de dólares.
+SELECT
+  language,
+  AVG(budget) AS movie_budget
+FROM movies
+GROUP BY language
+HAVING AVG(budget) > 50;

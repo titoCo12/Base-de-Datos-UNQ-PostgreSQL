@@ -1,0 +1,162 @@
+
+(a)
+
+SELECT nombre FROM trabajador
+WHERE tarifa BETWEEN 10 AND 12;
+
+-----------------------------------------------------
+
+(b)
+
+SELECT oficio, nombre FROM trabajador AS t
+WHERE t.legajo IN (SELECT a.legajo FROM asignacion AS a 
+                   WHERE a.id_e = 435); 
+
+
+--OTRA ALTERNATIVA---->
+
+
+SELECT t.oficio, t.nombre FROM trabajador AS t
+NATURAL JOIN asignacion AS a
+WHERE a.id_e = 435;
+
+--OTRA ALTERNATIVA---->
+
+SELECT t.oficio, t.nombre FROM trabajador AS t
+JOIN asignacion AS a ON t.legajo = a.legajo
+WHERE a.id_e = 435;
+
+-----------------------------------------------------
+
+(c)
+
+SELECT t.nombre, s.nombre FROM trabajador as t
+JOIN trabajador AS s ON t.legajo_supv = s.legajo;
+
+-----------------------------------------------------
+
+(d)
+
+SELECT DISTINCT t.nombre FROM trabajador AS t
+JOIN asignacion AS a ON t.legajo = a.legajo
+JOIN edificio AS e ON e.id_e = a.id_e
+WHERE e.tipo = 'oficina';
+
+-----------------------------------------------------
+
+(e)
+
+SELECT t.nombre FROM trabajador AS t
+JOIN trabajador AS s ON t.legajo_supv = s.legajo
+WHERE t.tarifa > s.tarifa;
+
+-----------------------------------------------------
+
+(f)
+
+SELECT SUM(a.num_dias) FROM  asignacion AS a
+WHERE a.legajo IN (SELECT t.legajo FROM trabajador AS t
+                   WHERE oficio = 'plomero')
+AND
+a.id_e = 312;
+
+-----------------------------------------------------
+
+(g)
+
+SELECT COUNT(DISTINCT oficio) FROM trabajador;
+
+-----------------------------------------------------
+
+(h)
+
+SELECT s.nombre "supervisor", MAX(t.tarifa) "paga" FROM trabajador AS t
+    JOIN trabajador AS s ON t.legajo_supv = s.legajo
+    WHERE t.nombre != s.nombre
+    GROUP BY s.nombre
+    HAVING COUNT(s.nombre) >0;
+    
+--OTRA ALTERNATIVA-->
+    
+SELECT legajo_supv, max(tarifa) FROM trabajador
+WHERE legajo_supv != legajo
+GROUP BY legajo_supv;
+
+-----------------------------------------------------
+
+(i)
+
+SELECT s.nombre "supervisor", MAX(t.tarifa) "paga" FROM trabajador AS t
+    JOIN trabajador AS s ON t.legajo_supv = s.legajo
+    WHERE t.nombre != s.nombre
+    GROUP BY s.nombre
+    HAVING COUNT(s.nombre) >1;
+
+-----------------------------------------------------
+
+(j)
+
+SELECT tipo, AVG(nivel_calidad) FROM edificio
+WHERE categoria = 1
+GROUP BY tipo
+HAVING MAX(nivel_calidad) <= 3;
+
+-----------------------------------------------------
+
+(k)
+
+SELECT nombre, tarifa FROM trabajador
+WHERE tarifa < (SELECT avg(tarifa) FROM trabajador);
+
+-- en caso de que una misma persona pueda tener mas de un puesto con distintas tarifas:
+
+SELECT nombre, tarifa FROM trabajador
+GROUP BY nombre, tarifa
+HAVING tarifa < (SELECT avg(tarifa) FROM trabajador);
+
+-----------------------------------------------------
+
+(l)
+
+SELECT legajo,nombre FROM trabajador AS t
+JOIN (SELECT oficio,AVG(tarifa) as tarifa_prom 
+     FROM trabajador
+     GROUP BY oficio) AS p ON t.oficio=p.oficio
+WHERE tarifa < p.tarifa_prom;
+
+-----------------------------------------------------
+
+(m)
+
+SELECT trab.legajo, trab.tarifa, trab.legajo_supv FROM trabajador AS trab
+JOIN (SELECT legajo_supv, avg(tarifa) AS prom_tarifa FROM trabajador 
+      WHERE legajo != legajo_supv
+      GROUP BY legajo_supv) AS prom ON trab.legajo_supv = prom.legajo_supv
+WHERE trab.legajo != prom.legajo_supv AND
+trab.tarifa < prom.prom_tarifa;
+
+-----------------------------------------------------
+
+(n)
+
+SELECT trab.nombre, asign.fecha_inicio FROM trabajador AS trab
+JOIN (SELECT legajo, id_e, fecha_inicio FROM asignacion) AS asign ON trab.legajo = asign.legajo
+JOIN (SELECT id_e FROM edificio) AS edif ON asign.id_e = edif.id_e
+WHERE edif.id_e = 435 AND
+trab.oficio = 'electricista';
+
+--este es mejor -->
+SELECT trab.nombre, asign.fecha_inicio FROM trabajador AS trab
+JOIN (SELECT legajo, id_e, fecha_inicio FROM asignacion) AS asign ON trab.legajo = asign.legajo
+JOIN (SELECT id_e FROM edificio WHERE id_e = 435) AS edif ON asign.id_e = edif.id_e
+WHERE trab.oficio = 'electricista';
+
+-----------------------------------------------------
+
+(ñ)
+
+SELECT DISTINCT legajo_supv FROM trabajador
+WHERE tarifa > 12 AND
+legajo != legajo_supv;
+
+-----------------------------------------------------

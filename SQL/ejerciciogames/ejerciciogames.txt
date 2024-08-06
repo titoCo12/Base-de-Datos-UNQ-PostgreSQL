@@ -1,0 +1,160 @@
+
+-- Ejercicio 2: GAMES
+-- Vamos a realizar diferentes consultas usando GROUP BY en una tabla que modela videogames
+-- Creación de la tabla GAMES
+CREATE TABLE games (
+  id serial primary key,
+  title VARCHAR(14),
+  company VARCHAR(16),
+  type VARCHAR(16),
+  production_year INTEGER,
+  systems VARCHAR(4),
+  production_cost INTEGER,
+  revenue INTEGER,
+  rating INTEGER
+);
+
+INSERT INTO games
+  (title, company, type, production_year, systems, production_cost, revenue, rating)
+VALUES
+  ('Blasting Boxes', 'Simone Games', 'action adventure', 1998, 'PC', 100000, 200000, 7),
+  ('Run Run Run!', '13 Mad Bits', 'shooter', 2011, 'PS3', 3500000, 650000, 3),
+  ('Duck n’Go', '13 Mad Bits', 'shooter', 2012, 'Xbox', 3000000, 1500000, 5),
+  ('SQL Wars!', 'Vertabelo', 'wargames', 2017, 'Xbox', 5000000, 25000000, 10),
+  ('Tap Tap Hex!', 'PixelGaming Inc.', 'rhythm', 2006, 'PS2', 2500000, 3500000, 7),
+  ('NoRisk', 'Simone Games', 'action adventure', 2004, 'PS2', 1400000, 3400000, 8);
+
+
+
+
+
+-- Consultas
+-- 1: Calcular el número de juegos producidos por cada empresa
+
+
+-- 2: Obtener el nombre y los ingresos totales de cada empresa
+
+
+-- 3: Generar un informe con el año de producción y el número de juegos lanzados este año (llamado recuento), la media del coste de producción de todos los juegos producidos en este año (llamado avg_cost) y los ingresos medios de ese año (llamado avg_revenue).
+
+
+-- 4: Cuente cuántos juegos de un tipo determinado son rentables (es decir, los ingresos fueron superiores al coste de producción). Indique el tipo de juego y el número de juegos rentables (denominado number_of_games) para cada tipo.
+
+
+-- 5: Obtener el tipo de juegos y los ingresos totales generados por los juegos con una production_year posterior a 2010 y con una PS2 o PS3 system. Ordena el resultado de forma que los tipos con mayores ingresos aparezcan en primer lugar.
+
+
+-- 6: Para todas las empresas presentes en la tabla, obtenga sus nombres y la suma del beneficio bruto de todos los años. (Supongamos que el beneficio bruto = ingresos - coste de producción). Nombra esta columna gross_profit_sum. Ordena los resultados por beneficio bruto, en orden descendente.
+
+
+-- 7: Obtener el beneficio bruto anual de cada empresa. Es decir, queremos un informe con el nombre de la empresa, el año y el beneficio bruto de ese año. Ordenar el informe por nombre de empresa y año.
+
+
+-- 8: Para cada empresa, seleccione su nombre, el número de juegos que ha producido (como columna number_of_games ), y el coste medio de producción (como columna avg_cost ). Muestra sólo las empresas que producen más de un juego.
+
+
+-- 9: Estamos interesados en los buenos juegos producidos entre 2000 y 2009. Un buen juego es un juego rentable con una puntuación superior a 6. Para cada empresa, muestre el nombre de la empresa, sus ingresos totales por juegos buenos producidos entre 2000 y 2009 (como la columna revenue_sum ), y el número de juegos buenos que produjo en este periodo (como la columna number_of_games ). Muestra sólo las empresas con ingresos por juegos buenos superiores a 4 000 000.
+
+
+-- 10: Devolver una lista de aquellas empresas y tipos de juegos en los que la empresa es líder del mercado. Un líder de mercado para un tipo de juego es una empresa que tiene unos ingresos totales para ese tipo de juego que superan los ingresos totales de todas las demás empresas para ese tipo de juego.Indique el nombre de la empresa, el tipo de juego y los ingresos totales de la empresa por ese tipo de juego.
+
+
+
+
+
+
+
+
+
+RESUELTO :
+
+
+-- 1: Calcular el número de juegos producidos por cada empresa
+SELECT
+  company,
+  COUNT(*)
+FROM games
+GROUP BY company;
+
+-- 2: Obtener el nombre y los ingresos totales de cada empresa
+SELECT
+  company,
+  SUM(revenue)
+FROM games
+GROUP BY company;
+
+-- 3: Generar un informe con el año de producción y el número de juegos lanzados este año (llamado recuento), la media del coste de producción de todos los juegos producidos en este año (llamado avg_cost) y los ingresos medios de ese año (llamado avg_revenue).
+SELECT  
+  production_year,
+  COUNT(*) AS count,
+  AVG(production_cost) AS avg_cost,
+  AVG(revenue) AS avg_revenue
+FROM games
+GROUP BY production_year;
+
+-- 4: Cuente cuántos juegos de un tipo determinado son rentables (es decir, los ingresos fueron superiores al coste de producción). Indique el tipo de juego y el número de juegos rentables (denominado number_of_games) para cada tipo.
+
+SELECT   
+  type,
+  COUNT(*) AS number_of_games
+FROM games
+WHERE revenue > production_cost
+GROUP BY type;
+
+-- 5: Obtener el tipo de juegos y los ingresos totales generados por los juegos con una production_year posterior a 2010 y con una PS2 o PS3 system. Ordena el resultado de forma que los tipos con mayores ingresos aparezcan en primer lugar.
+SELECT
+  type,
+  SUM(revenue) AS total_revenue
+FROM games
+WHERE production_year > 2010 AND systems IN ('PS2','PS3')
+GROUP BY type;
+
+-- 6: Para todas las empresas presentes en la tabla, obtenga sus nombres y la suma del beneficio bruto de todos los años. (Supongamos que el beneficio bruto = ingresos - coste de producción). Nombra esta columna gross_profit_sum. Ordena los resultados por beneficio bruto, en orden descendente.
+SELECT
+  company,
+  SUM(revenue - production_cost) AS gross_profit_sum
+FROM games
+GROUP BY company
+ORDER BY gross_profit_sum DESC;
+
+-- 7: Obtener el beneficio bruto anual de cada empresa. Es decir, queremos un informe con el nombre de la empresa, el año y el beneficio bruto de ese año. Ordenar el informe por nombre de empresa y año.
+SELECT
+  company,
+  production_year,
+  SUM(revenue - production_cost) AS gross_profit_sum
+FROM  games
+GROUP BY company, production_year
+ORDER BY company, production_year;
+
+-- 8: Para cada empresa, seleccione su nombre, el número de juegos que ha producido (como columna number_of_games ), y el coste medio de producción (como columna avg_cost ). Muestra sólo las empresas que producen más de un juego.
+SELECT
+  company,
+  COUNT(company) AS number_of_games,
+  AVG(production_cost) AS avg_cost
+FROM games
+GROUP BY company
+HAVING COUNT(*) > 1;
+
+-- 9: Estamos interesados en los buenos juegos producidos entre 2000 y 2009. Un buen juego es un juego rentable con una puntuación superior a 6. Para cada empresa, muestre el nombre de la empresa, sus ingresos totales por juegos buenos producidos entre 2000 y 2009 (como la columna revenue_sum ), y el número de juegos buenos que produjo en este periodo (como la columna number_of_games ). Muestra sólo las empresas con ingresos por juegos buenos superiores a 4 000 000.
+SELECT
+  company,
+  COUNT(company) AS number_of_games,
+  SUM(revenue) AS revenue_sum
+FROM games
+WHERE production_year BETWEEN 2000 AND 2009
+  AND rating > 6
+  AND revenue - production_cost > 0
+GROUP BY company
+HAVING SUM(revenue) > 4000000;
+
+-- 10: Devolver una lista de aquellas empresas y tipos de juegos en los que la empresa es líder del mercado. Un líder de mercado para un tipo de juego es una empresa que tiene unos ingresos totales para ese tipo de juego que superan los ingresos totales de todas las demás empresas para ese tipo de juego.Indique el nombre de la empresa, el tipo de juego y los ingresos totales de la empresa por ese tipo de juego.
+SELECT
+  company,
+  type,
+  SUM(revenue) as total_revenue
+FROM games g1
+GROUP BY company, type
+HAVING SUM(revenue) > ( SELECT SUM(revenue)
+                        FROM games g2
+                        WHERE g2.type = g1.type
+                        AND g2.company <> g1.company );

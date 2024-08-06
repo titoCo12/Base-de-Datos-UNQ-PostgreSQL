@@ -1,0 +1,45 @@
+
+--(a) Obtener todos los (cod_plancha, fabricante) de las planchas instaladas en sucursales que no tengan lavarropas ESPañoles.
+
+
+SELECT pla.codplancha, pla.fabricante FROM plancha AS pla
+WHERE pla.idsucursal NOT IN (SELECT idsucursal FROM lavarropas 
+                              WHERE origen = 'ESP' ); 
+                              
+                              
+--(b) Obtener todos los (cod_lavarropas, marca) de los lavarropas fabricados en BRA o que en la sucursal donde está instalado trabaje el empleado “johnny”
+
+
+SELECT lav.codlavarropas, lav.marca FROM lavarropas AS lav
+WHERE origen = 'BRA' OR
+idsucursal IN (SELECT pla.idsucursal FROM plancha AS pla
+                JOIN turno AS tur ON pla.codplancha = tur.plancha_id
+                WHERE apodo = 'Johnny');
+                
+                
+--(c) Obtener la (id_sucursal, cantidad) de lavarropas por sucursal.
+
+
+SELECT suc.idsucursal, COUNT(lav.codlavarropas) FROM sucursal AS suc
+JOIN lavarropas AS lav ON suc.idsucursal = lav.idsucursal
+GROUP BY suc.idsucursal;
+
+
+--(d) Obtener el promedio de horas trabajadas por empleado, de aquellos empleados que trabajan en sucursales que tienen lavarropas con capacidad de más de 20 kg y cuyo promedio de horas trabajadas sea mayor a 5.
+
+
+SELECT AVG(tur.horas), tur.apodo FROM turno AS tur
+JOIN plancha AS pla ON tur.plancha_id = pla.codplancha
+JOIN lavarropas AS lav ON pla.idsucursal = lav.idsucursal
+WHERE lav.capacidad > 20
+GROUP BY tur.apodo
+HAVING AVG(tur.horas) > 5;
+
+
+--(e) Obtener los empleados que trabajaron solamente con planchas del fabricante “Atma”.
+
+
+SELECT DISTINCT tur.apodo FROM turno AS tur
+JOIN plancha AS pla ON tur.plancha_id = pla.codplancha
+WHERE pla.fabricante = 'ATMA';
+

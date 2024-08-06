@@ -1,0 +1,35 @@
+I.
+	a) Una tabla de JOIN natural de los atributos de prestamo y ejemplar de las intancias que tenian
+	los mismos codigos de ejemplar.
+
+	b) Una tabla de JOIN natural de los atributos de prestamo y socio de las instancias que tenian 
+	los mismos codigos de socio.
+
+-----------------------------------------------------------------------------------------------------------
+
+II. No, no tendria sentido ya que no comparten ningun atributo en comun. Para eso CROSS JOIN
+
+-----------------------------------------------------------------------------------------------------------
+
+III. Para que tenga sentido la consulta, R1 y R2 deberian tener por lo menos un atributo en comun
+
+-----------------------------------------------------------------------------------------------------------
+
+IV. Para que tenga sentido la consulta, R1 y R2 deberian tener por lo menos un atributo en comun, y se deberia cumplir la condicion B.
+
+-----------------------------------------------------------------------------------------------------------
+
+V. 
+	a) SELECT titulo 
+	FROM libro JOIN ejemplar 
+	ON isbn = isbn_libro
+	WHERE edicion = 2 OR edicion = 3;
+
+
+
+	b) SELECT nombre_y_apellido, COUNT(cod_socio) as CantPrestamos
+	   FROM socio NATURAL JOIN prestamo
+           WHERE fecha_prestamo >= '2023-12-21'
+            AND fecha_prestamo <= '2024-03-20'
+           GROUP BY nombre_y_apellido;
+

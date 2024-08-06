@@ -1,0 +1,18 @@
+I.
+	a) Devuelve los codigos de los socios que sacaron un prestamo despues
+	del 31 de Enero de 2012.
+
+	b) Devuelve los codigos de los ejemplares que fueron prestados despues
+	del 31 de Enero de 2012.
+
+-----------------------------------------------------------------------------------------
+
+II. 
+	a) solo R1 
+	b) solo R1 y R2
+
+-----------------------------------------------------------------------------------------
+
+III. 
+	SELECT isbn_libro FROM ejemplar
+	WHERE edicion = 2 OR edicion = 3;

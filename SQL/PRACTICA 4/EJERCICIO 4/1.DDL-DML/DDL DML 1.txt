@@ -1,0 +1,3 @@
+UPDATE comercio
+SET direccion = 'Balcarce 50'
+WHERE comercio = 42;

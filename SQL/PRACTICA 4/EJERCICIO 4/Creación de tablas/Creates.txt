@@ -1,0 +1,33 @@
+---------------- create's----------------------
+
+CREATE TABLE producto (
+  pid INT PRIMARY KEY,
+  descripcion VARCHAR(70),
+  tipo VARCHAR(40),
+  contenido VARCHAR(40)
+);
+  
+CREATE TABLE tipo (
+  tipo VARCHAR(40) PRIMARY KEY,
+  descripcion VARCHAR(100)
+);
+
+CREATE TABLE comercio (
+  comercio INT PRIMARY KEY,
+  nombre VARCHAR(100),
+  direccion VARCHAR(250),
+  barrio VARCHAR(50),
+  zona VARCHAR (60)
+);
+
+CREATE TABLE precio (
+  pid INT,
+  comercio INT,
+  fecharegistro DATE,
+  precio DECIMAL(10,2),
+  PRIMARY KEY (pid,comercio,fecharegistro),
+  CONSTRAINT precio_producto_fk FOREIGN KEY (pid)
+REFERENCES producto(pid),
+  CONSTRAINT comercio_producto_fk FOREIGN KEY (comercio)
+REFERENCES comercio(comercio)
+);

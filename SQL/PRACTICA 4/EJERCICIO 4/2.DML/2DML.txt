@@ -1,0 +1,61 @@
+--(a) ¿Choclo o Pochoclo? Listar los productos que el contenido sea “Choclo” y el tipo “Enlatado” o el contenido sea “Pochoclo” y el tipo “Bolsa”.
+
+
+SELECT pid FROM producto 
+WHERE (contenido = 'Choclo' AND tipo = 'Enlatado') OR
+(contenido Like '%Pochoclo%' AND tipo = 'Bolsa');
+
+
+--(b) ¿A cuánto el tomate? Listar los precios del tomate que se vende en la zona de Bernal
+
+
+SELECT pre.precio FROM precio AS pre
+JOIN comercio AS com ON pre.comercio = com.comercio
+JOIN producto AS pro ON pre.pid = pro.pid
+WHERE com.zona = 'Bernal' AND
+pro.descripcion = 'Tomate';
+
+
+--(c) Comercios Gourmet: Listar los comercios que venden Avellanas a más de $50 y también venden Frutas Secas a menos de $40.
+
+
+SELECT DISTINCT pre.comercio FROM precio AS pre
+JOIN producto AS pro ON pre.pid = pro.pid
+WHERE (pro.descripcion = 'Avellana' AND pre.precio > 50) AND
+(pro.descripcion = 'Frutas Secas' AND pre.precio < 40);
+
+
+--(d) Productos Exclusivos: Listar los <pid, descripcion> de los productos que son vendidos en el barrio de Palermo, pero que no son vendidos en el barrio de San Telmo.
+
+
+SELECT pro.pid, pro.descripcion FROM producto AS pro
+JOIN precio AS pre ON pro.pid = pre.pid
+JOIN comercio AS com ON pre.comercio = com.comercio
+WHERE com.barrio = 'Palermo' AND
+pro.pid NOT IN (SELECT pre.pid FROM precio AS pre
+                JOIN comercio AS com ON pre.comercio = com.comercio
+                WHERE barrio = 'San Telmo');
+
+
+--(e) Barrios: Listar el <precio-promedio, barrio> del precio promedio de los productos ofrecidos en cada barrio.
+
+
+SELECT AVG(pre.precio), com.barrio FROM precio AS pre
+JOIN comercio AS com ON pre.comercio = com.comercio
+GROUP BY com.barrio;
+
+
+--(f) Los precios de ahorita: Obtener la lista de los productos con sus precios actuales
+
+
+SELECT pid, precio FROM precio
+WHERE fecharegistro = CURRENT_DATE;
+
+
+--(g) Sobreprecios: Obtener la lista de los productos que sufrieron aumentos en las entre dos fechas diferentes (no necesariamente consecutivas).
+
+
+SELECT DISTINCT pre1.pid FROM precio AS pre1
+JOIN precio AS pre2 ON pre1.pid = pre2.pid
+WHERE (pre1.fecharegistro < pre2.fecharegistro) AND
+(pre1.precio < pre2.precio);

@@ -1,0 +1,54 @@
+(b)
+
+ALTER TABLE ejemplar
+ADD COLUMN aañoedicion int;
+
+------------------------------------------------------------------------------------
+
+(c)
+
+ALTER TABLE socio
+ADD COLUMN domicilio varchar(255);
+
+------------------------------------------------------------------------------------
+
+(d)
+
+UPDATE socio
+SET monto_cuota = monto_cuota + 10;
+
+------------------------------------------------------------------------------------
+
+(e)
+
+ALTER TABLE nacionalidad
+ALTER COLUMN nacionalidad TYPE varchar(15);
+
+INSERT INTO nacionalidad (nombre_pais,nacionalidad)
+VALUES ('Colombia','Colombiana');
+
+UPDATE socio
+SET pais = 'Mexico'
+WHERE nombre_y_apellido = 'Amy Farrah Fowler';
+
+UPDATE socio
+SET pais = 'Colombia'
+WHERE nombre_y_apellido = 'Howard Wolowitz';
+
+------------------------------------------------------------------------------------
+
+(f)
+
+DELETE FROM nacionalidad
+WHERE nombre_pais = 'Peru';
+
+------------------------------------------------------------------------------------
+
+(g)
+
+DELETE FROM prestamo
+WHERE cod_ejemplar IN 
+(SELECT cod_ejemplar FROM ejemplar WHERE edicion = 3);
+
+DELETE FROM ejemplar
+WHERE edicion = 3;

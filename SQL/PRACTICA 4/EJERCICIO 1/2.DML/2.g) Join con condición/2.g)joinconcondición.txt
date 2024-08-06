@@ -1,0 +1,6 @@
+a) JOIN desastroso que devuelve un producto cartesiano entre la tabla prestamo y la tabla socio,
+en el cual no se mezclan los atributos cod_socio, y solo quedan las tuplas que tengan una fecha de ingreso
+menor a la fecha de prestamo.
+
+b)Join condicional entre las tablas ejemplar y socio que devuelve las tuplas con una fecha de ingreso menor
+al primero de Febrero de 2008.

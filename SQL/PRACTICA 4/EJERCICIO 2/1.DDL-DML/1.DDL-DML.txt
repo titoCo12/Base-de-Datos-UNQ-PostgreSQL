@@ -1,0 +1,63 @@
+(a)
+
+ALTER TABLE trabajador
+ADD COLUMN edad int;
+
+-------------------------------------------------
+
+(b)
+
+ALTER TABLE edificio
+ADD COLUMN ciudad varchar(255);
+
+-------------------------------------------------
+
+(c)
+
+UPDATE asignacion
+SET num_dias = num_dias + 4;
+
+-------------------------------------------------
+
+(d)
+
+UPDATE edificio 
+SET nivel_calidad = 5
+WHERE tipo = 'oficina' AND
+nivel_calidad = 4;
+
+
+UPDATE edificio 
+SET categoria = 4
+WHERE tipo = 'oficina' AND
+categoria = 1;
+
+-------------------------------------------------
+
+(e) (en ese orden)
+
+DELETE FROM asignacion as a
+WHERE a.legajo IN (SELECT t.legajo FROM trabajador as t
+           WHERE t.oficio = 'plomero' );
+ 
+
+DELETE FROM trabajador 
+WHERE oficio = 'plomero';
+
+
+-------------------------------------------------
+
+(f)
+
+DELETE FROM asignacion as a
+WHERE a.id_e IN (SELECT e.id_e FROM edificio as e
+           WHERE e.tipo = 'residencia' );
+ 
+
+DELETE FROM edificio
+WHERE tipo = 'residencia';
+
+-------------------------------------------------
+
+
+

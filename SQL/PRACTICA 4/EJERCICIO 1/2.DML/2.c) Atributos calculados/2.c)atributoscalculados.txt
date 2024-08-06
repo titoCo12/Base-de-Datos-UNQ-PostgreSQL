@@ -1,0 +1,12 @@
+a)
+
+SELECT EXTRACT(day FROM fecha_devolucion - fecha_prestamo)
+FROM prestamo
+WHERE fecha_devolucion NOTNULL;
+
+----------------------------------------------------------------------------------------------------
+
+b)
+
+SELECT nombre_y_apellido, monto_cuota * 12 
+FROM socio;

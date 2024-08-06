@@ -1,0 +1,13 @@
+
+--(a) Agregar 3 tuplas a la tabla tarjetaamarilla.
+
+INSERT INTO tarjetaamarilla (idpartido,nombreamonestado,minuto) VALUES (103251,'Wyatt Mercer','15'),
+(103254,'Wesley Koch','17'),
+(103241,'Mufutau Molina','2');
+
+
+--(b) Actualizar la cantidad de banderitas del Minerao a 3000 banderitas.
+
+UPDATE estadio
+SET cantidadbanderitas = 3000
+WHERE nombre = 'MINERAO';

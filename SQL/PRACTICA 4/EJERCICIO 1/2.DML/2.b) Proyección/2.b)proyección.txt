@@ -1,0 +1,9 @@
+I.Una boludez.
+
+II. No, no es lo mismo ya que a diferencia de la proyeccion de AR, el SELECT en SQL no elimina
+resultados repetidos. Para simular un resultado parecido se tendria que usar DISTINCT despues del SELECT.
+
+III. Otra boludez.
+
+IV. SELECT nombre_y_apellido FROM socio; 
+	
